@@ -54,7 +54,11 @@ def Winner(board, player):
         for row in range(ROW_COUNT-3):
             if board[row][column] == player and board[row+1][column] == player and board[row+2][column] == player and board[row+3][column] == player:
                 return True
-
+    #check positive diagonals
+    for column in range(COLUMN_COUNT-3):
+        for row in range(3,ROW_COUNT):
+            if board[row][column] == player and board[row-1][column+1] == player and board[row-2][column+2] == player and board[row-3][column+3] == player:
+                return True
 #AI Agents
 #Random Agent
 #Randomly places a move with no thought put into it
