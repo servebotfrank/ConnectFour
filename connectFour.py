@@ -9,6 +9,9 @@ COLUMN_COUNT = 7
 EVEN = 0
 ODD = 1
 
+BLUE = (0,0,255)
+YELLOW = ()
+
 
 
 
@@ -70,44 +73,61 @@ def Random(board, player):
         return valid_move(board, i)
 
 
-
-
+def draw_board(board):
+    for column in range (COLUMN_COUNT):
+        for row in range (ROW_COUNT):
+            pygame.draw.rect(screen, BLUE, (column*SQUARESIZE, row*SQUARESIZE, SQUARESIZE, SQUARESIZE))
+SQUARESIZE = 100
 board = create_Board()
 print_Board(board)
 game_over = False
 turn = 0
 
+width = COLUMN_COUNT * SQUARESIZE
+height = (ROW_COUNT+1)* SQUARESIZE
+
+size = (width, height)
+screen= pygame.display.set_mode(size)
+draw_board(board)
+pygame.display.update()
+
 
 #While game_over is false
 #If game_over becomes true, the loop ends
 while not game_over:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+
     #Asks for player 1 input
-    if turn == 0:
-        column = int(input("Player 1, make your move. (0-6):"))
-        if valid_move(board, column):
-            row = getNextRow(board, column)
-            drop_piece(board, row, column, 1)
+            # if turn == 0:
+            #     column = int(input("Player 1, make your move. (0-6):"))
+            #     if valid_move(board, column):
+            #         row = getNextRow(board, column)
+            #         drop_piece(board, row, column, 1)
+            #
+            #         if Winner(board, 1):
+            #             print("Player 1 Wins!")
+            #             game_over = True
+            #
+            #
+            # #Asks for Player 2 input
+            # else:
+            #     #column = int(input("Player 2, make your move. (0-6):"))
+            #     #Implements a random agent. Will just place random moves.
+            #     i = random.randint(0,6)
+            #     if valid_move(board, i):
+            #         row = getNextRow(board, i)
+            #         drop_piece(board, row, i, 2)
+            #
+            #         if Winner(board, 2):
+            #             print("Player 2 Wins!")
+            #             game_over = True
 
-            if Winner(board, 1):
-                print("Player 1 Wins!")
-                game_over = True
+            print_Board(board)
 
-
-    #Asks for Player 2 input
-    else:
-        #column = int(input("Player 2, make your move. (0-6):"))
-        #Implements a random agent. Will just place random moves.
-        i = random.randint(0,6)
-        if valid_move(board, i):
-            row = getNextRow(board, i)
-            drop_piece(board, row, i, 2)
-
-            if Winner(board, 2):
-                print("Player 2 Wins!")
-                game_over = True
-
-    print_Board(board)
-
-    #When turn is odd, it's player 2's turn. When zero, it's player 1's
-    turn +=1
-    turn = turn%2
+            #When turn is odd, it's player 2's turn. When zero, it's player 1's
+            turn +=1
+            turn = turn%2
