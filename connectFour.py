@@ -10,7 +10,7 @@ EVEN = 0
 ODD = 1
 
 BLUE = (0,0,255)
-YELLOW = ()
+BLACK = (0, 0, 0)
 
 
 
@@ -76,15 +76,20 @@ def Random(board, player):
 def draw_board(board):
     for column in range (COLUMN_COUNT):
         for row in range (ROW_COUNT):
-            pygame.draw.rect(screen, BLUE, (column*SQUARESIZE, row*SQUARESIZE, SQUARESIZE, SQUARESIZE))
-SQUARESIZE = 100
+            pygame.draw.rect(screen, BLUE, (column*SQUARESIZE, row*SQUARESIZE+SQUARESIZE, SQUARESIZE, SQUARESIZE))
+            pygame.draw.circle(screen,BLACK, (int(column*SQUARESIZE+SQUARESIZE/2), int(row*SQUARESIZE+SQUARESIZE+SQUARESIZE/2)), RADIUS)
+
+turn = 0
+pygame.init()
+game_over = False
 board = create_Board()
 print_Board(board)
-game_over = False
-turn = 0
+SQUARESIZE = 100
+
 
 width = COLUMN_COUNT * SQUARESIZE
 height = (ROW_COUNT+1)* SQUARESIZE
+RADIUS = int(SQUARESIZE/2 - 5)
 
 size = (width, height)
 screen= pygame.display.set_mode(size)
