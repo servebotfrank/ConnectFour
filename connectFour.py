@@ -11,7 +11,8 @@ ODD = 1
 
 BLUE = (0,0,255)
 BLACK = (0, 0, 0)
-
+RED = (255,0,0)
+YELLOW = (255,255,0)
 
 
 
@@ -77,8 +78,14 @@ def draw_board(board):
     for column in range (COLUMN_COUNT):
         for row in range (ROW_COUNT):
             pygame.draw.rect(screen, BLUE, (column*SQUARESIZE, row*SQUARESIZE+SQUARESIZE, SQUARESIZE, SQUARESIZE))
-            pygame.draw.circle(screen,BLACK, (int(column*SQUARESIZE+SQUARESIZE/2), int(row*SQUARESIZE+SQUARESIZE+SQUARESIZE/2)), RADIUS)
-
+            pygame.draw.circle(screen, BLACK, (int(column*SQUARESIZE+SQUARESIZE/2), int(row*SQUARESIZE+SQUARESIZE+SQUARESIZE/2)), RADIUS)
+    for column in range (COLUMN_COUNT):
+        for row in range (ROW_COUNT):
+            if  board[row][column] == 1:
+                pygame.draw.circle(screen, RED, (int(column*SQUARESIZE+SQUARESIZE/2), height -int(row*SQUARESIZE+SQUARESIZE/2)), RADIUS)
+            elif board[row][column] == 2:
+                pygame.draw.circle(screen, YELLOW, (int(column*SQUARESIZE+SQUARESIZE/2), height -int(row*SQUARESIZE+SQUARESIZE/2)), RADIUS)
+    pygame.display.update()
 turn = 0
 pygame.init()
 game_over = False
@@ -105,33 +112,36 @@ while not game_over:
             sys.exit()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
+            #Asks for player 1 input
+            if turn == 0:
+                posx = event.pos[0]
+                column = int(math.floor(posx/SQUARESIZE))
+                if valid_move(board, column):
+                    row = getNextRow(board, column)
+                    drop_piece(board, row, column, 1)
 
-    #Asks for player 1 input
-            # if turn == 0:
-            #     column = int(input("Player 1, make your move. (0-6):"))
-            #     if valid_move(board, column):
-            #         row = getNextRow(board, column)
-            #         drop_piece(board, row, column, 1)
-            #
-            #         if Winner(board, 1):
-            #             print("Player 1 Wins!")
-            #             game_over = True
-            #
-            #
+                    if Winner(board, 1):
+                        print("Player 1 Wins!")
+                        game_over = True
+
+
             # #Asks for Player 2 input
-            # else:
-            #     #column = int(input("Player 2, make your move. (0-6):"))
-            #     #Implements a random agent. Will just place random moves.
-            #     i = random.randint(0,6)
-            #     if valid_move(board, i):
-            #         row = getNextRow(board, i)
-            #         drop_piece(board, row, i, 2)
-            #
-            #         if Winner(board, 2):
-            #             print("Player 2 Wins!")
-            #             game_over = True
+            else:
+                #Implements a random agent. Will just place random moves.
+                posx = event.pos[0]
+                column = int(math.floor(posx/SQUARESIZE))
+                #column = int(input("Player 2, make your move. (0-6):"))
+                # i = random.randint(0,6)
+                if valid_move(board, column):
+                    row = getNextRow(board, column)
+                    drop_piece(board, row, column, 2)
+
+                    if Winner(board, 2):
+                        print("Player 2 Wins!")
+                        game_over = True
 
             print_Board(board)
+            draw_board(board)
 
             #When turn is odd, it's player 2's turn. When zero, it's player 1's
             turn +=1
