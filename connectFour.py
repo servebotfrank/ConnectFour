@@ -103,6 +103,9 @@ screen= pygame.display.set_mode(size)
 draw_board(board)
 pygame.display.update()
 
+font = pygame.font.SysFont("monospace", 75)
+
+
 
 #While game_over is false
 #If game_over becomes true, the loop ends
@@ -110,6 +113,15 @@ while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+
+        if event.type == pygame.MOUSEMOTION:
+            pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
+            posx = event.pos[0]
+            if turn == 0:
+                pygame.draw.circle(screen, RED, (posx, int(SQUARESIZE/2)), RADIUS)
+            else:
+                pygame.draw.circle(screen, YELLOW, (posx, int(SQUARESIZE/2)), RADIUS)
+            pygame.display.update()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             #Asks for player 1 input
@@ -121,7 +133,8 @@ while not game_over:
                     drop_piece(board, row, column, 1)
 
                     if Winner(board, 1):
-                        print("Player 1 Wins!")
+                        label = font.render("Player 1 wins!", 1, RED)
+                        screen.blit(label, (40, 10))
                         game_over = True
 
 
@@ -137,7 +150,8 @@ while not game_over:
                     drop_piece(board, row, column, 2)
 
                     if Winner(board, 2):
-                        print("Player 2 Wins!")
+                        label = font.render("Player 2 wins!", 1, YELLOW)
+                        screen.blit(label, (40, 10))
                         game_over = True
 
             print_Board(board)
@@ -146,3 +160,6 @@ while not game_over:
             #When turn is odd, it's player 2's turn. When zero, it's player 1's
             turn +=1
             turn = turn%2
+
+            if game_over:
+                pygame.time.wait(2000)
